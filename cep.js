@@ -57,7 +57,7 @@ const peencherFormulario = async (evento) => {
     // console.log(cep);
     limparFormulario();
     // segunda opcao de receber os dados
-    const cep = evento.target.value; //target o alvo, forma mais facil de receber os dados do cep
+    const cep = evento.target.value.replace('-', '') //target o alvo, forma mais facil de receber os dados do cep
     // console.log(cep);
     // console.log(cep);
     
@@ -65,14 +65,20 @@ const peencherFormulario = async (evento) => {
     // 14 passo - antes de fazer uma requisição
     if(cepValido(cep)){
         const infoCep = await pesquisarCep(cep); // 5 passo, criar uma função que retorna o endereco tudo
-   
-     //13 passo - colocar na caixa de texto os dados
-    document.querySelector("#endereco").value = infoCep.logradouro;
-    document.querySelector("#bairro").value = infoCep.bairro;
-    document.querySelector("#cidade").value = infoCep.localidade;
-    document.querySelector("#estado").value = infoCep.uf;
+        // console.log(infoCep);
+
+         if(infoCep.erro){ // 17 passo
+            document.querySelector("#endereco").value = 'CEP não encontrado';
+         }else{
+                //13 passo - colocar na caixa de texto os dados
+            document.querySelector("#endereco").value = infoCep.logradouro;
+            document.querySelector("#bairro").value = infoCep.bairro;
+             document.querySelector("#cidade").value = infoCep.localidade;
+             document.querySelector("#estado").value = infoCep.uf;
+         }
+
     }else{
-        document.querySelector("#endereco").value = 'cep incorreto!!!';
+        document.querySelector("#endereco").value = 'CEP incorreto!!!';
     }
 
     
